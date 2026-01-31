@@ -52,12 +52,10 @@ def convert_iso2_to_iso3(iso2):
 
 
 # converte as siglas para iso3
-df_limpo = df_limpo.assign(
-    employee_residence=convert_iso2_to_iso3(df_limpo["employee_residence"])
+df_limpo["employee_residence"] = df_limpo["employee_residence"].apply(
+    convert_iso2_to_iso3
 )
-df_limpo = df_limpo.assign(
-    company_location=convert_iso2_to_iso3(df_limpo["company_location"])
-)
+df_limpo["company_location"] = df_limpo["company_location"].apply(convert_iso2_to_iso3)
 
 # exporta para cvs a database tratada
 df_limpo.to_csv("dataBase_salary.csv", index=False)
