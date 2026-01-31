@@ -52,3 +52,10 @@ company_size_selected = st.sidebar.multiselect(
     company_size_options,
     placeholder="Selecione o tamanho da empresa",
 )
+
+company_location_options = df["company_location"].unique().tolist()
+company_location_selected = st.sidebar.multiselect(
+    "Localizacao da empresa",
+    company_location_options,
+    placeholder="Selecione a localizacao da empresa",
+)
