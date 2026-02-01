@@ -59,3 +59,74 @@ company_location_selected = st.sidebar.multiselect(
     company_location_options,
     placeholder="Selecione a localizacao da empresa",
 )
+
+# apply filters
+df_filtered = df.copy()
+
+filters = {
+    "work_year": years_selected,
+    "experience_level": experience_level_selected,
+    "employment_type": employment_type_selected,
+    "job_title": job_title_selected,
+    "company_size": company_size_selected,
+    "company_location": company_location_selected,
+}
+
+# aplica a logica de filtrar somente se a lista de valores nao estiver vazia
+for column, selected_values in filters.items():
+    if selected_values:
+        df_filtered = df_filtered[df_filtered[column].isin(selected_values)]
+
+
+# conteudo principal acesso rapido
+st.markdown(
+    "<h1 style='text-align: center;'>🎲 Análise de Salários na Área de Dados 🎲</h1>",
+    unsafe_allow_html=True,
+)
+st.markdown(
+    """
+    <div style='text-align: center;'>
+        <h4>Explore os dados salariais da área de dados dos últimos anos.</h4>
+        <p>Utilize os filtros do campo a esquerda para facilitar sua vizualização.</p>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
+
+st.markdown("---")
+
+# principais metricas
+st.subheader(":straight_ruler: *Principais Métricas*")
+
+if not df_filtered.empty:
+    mean_salary = df_filtered["salary_in_usd"].mean()
+    max_salary = df_filtered["salary_in_usd"].max()
+    median_salary = df_filtered["salary_in_usd"].median()
+    total_registers = df_filtered.shape[0]
+    most_common_job = df_filtered["job_title"].mode()[0]
+else:
+    mean_salary = 0
+    max_salary = 0
+    median_salary = 0
+    total_registers = 0
+    most_common_job = ""
+
+# layout exibicao das metricas
+# primeira linha de colunas de dados relacionados a salario
+col1, col2, col3 = st.columns(3)
+
+col1.metric("Salário Médio", f"${mean_salary:,.2f}")
+col2.metric("Salário Máximo", f"${max_salary:,.2f}")
+col3.metric("Salário Mediano", f"${median_salary:,.2f}")
+
+# segunda linha de colunas de dados relacionados a quantidade de registros e cargo mais comum, centralizados
+vazio_esq, col4, col5, vazio_dir = st.columns([1, 2, 2, 1])
+
+with col4:
+    col4.metric("Total de registros", total_registers)
+with col5:
+    col5.metric("Cargo mais comum", most_common_job)
+
+st.markdown("---")
+
+# criar os graficos
