@@ -190,7 +190,7 @@ pip install -r requirements.txt
 streamlit run App.py
 ```
 
-#✒️ Author
+# ✒️ Author
 
 Developed by Iury Ramos Sodré
 
